@@ -343,6 +343,7 @@ func receiveThread(con *XdsConnection, reqChannel chan *xdsapi.DiscoveryRequest,
 	defer close(reqChannel) // indicates close of the remote side.
 	for {
 		req, err := con.stream.Recv()
+		adsLog.Infof("#####:req:%v", *req)
 		if err != nil {
 			if status.Code(err) == codes.Canceled || err == io.EOF {
 				con.mu.RLock()
@@ -371,7 +372,7 @@ func (s *DiscoveryServer) StreamAggregatedResources(stream ads.AggregatedDiscove
 	if ok {
 		peerAddr = peerInfo.Addr.String()
 	}
-
+	adsLog.Infof("#####peerAddr:%v", peerAddr)
 	t0 := time.Now()
 	// rate limit the herd, after restart all endpoints will reconnect to the
 	// poor new pilot and overwhelm it.
@@ -391,6 +392,7 @@ func (s *DiscoveryServer) StreamAggregatedResources(stream ads.AggregatedDiscove
 		return err
 	}
 	con := newXdsConnection(peerAddr, stream)
+	adsLog.Infof("#####con:%v", *con)
 
 	// Do not call: defer close(con.pushChannel) !
 	// the push channel will be garbage collected when the connection is no longer used.
@@ -410,6 +412,7 @@ func (s *DiscoveryServer) StreamAggregatedResources(stream ads.AggregatedDiscove
 		// Block until either a request is received or a push is triggered.
 		select {
 		case discReq, ok := <-reqChannel:
+			adsLog.Infof("#####discReq from reqChannel:%v | discReq.string():%v", *discReq, discReq.String())
 			if !ok {
 				// Remote side closed connection.
 				return receiveError
@@ -472,6 +475,7 @@ func (s *DiscoveryServer) StreamAggregatedResources(stream ads.AggregatedDiscove
 					continue
 				}
 				routes := discReq.GetResourceNames()
+				adsLog.Infof("#####:GetResourceNames:len(routes):%v, routes:%v", len(routes), routes)
 				var sortedRoutes []string
 				if discReq.ResponseNonce != "" {
 					con.mu.RLock()
@@ -529,6 +533,7 @@ func (s *DiscoveryServer) StreamAggregatedResources(stream ads.AggregatedDiscove
 					continue
 				}
 				clusters := discReq.GetResourceNames()
+				adsLog.Infof("#####:GetResourceNames:len(clusters):%v, clusters:%v", len(clusters), clusters)
 				if clusters == nil && discReq.ResponseNonce != "" {
 					// There is no requirement that ACK includes clusters. The test doesn't.
 					con.mu.Lock()
@@ -541,6 +546,7 @@ func (s *DiscoveryServer) StreamAggregatedResources(stream ads.AggregatedDiscove
 					continue
 				}
 				if len(clusters) == len(con.Clusters) {
+					adsLog.Infof("#####:len(con.Clusters):%v, con.Clusters:%v", len(con.Clusters), con.Clusters)
 					sort.Strings(clusters)
 					sort.Strings(con.Clusters)
 
@@ -652,9 +658,11 @@ func (s *DiscoveryServer) initConnectionNode(discReq *xdsapi.DiscoveryRequest, c
 
 	con.mu.Lock()
 	con.modelNode = nt
+	adsLog.Infof("#####:con.modelNode/proxy: %v", *nt)
 	if con.ConID == "" {
 		// first request
 		con.ConID = connectionID(discReq.Node.Id)
+		adsLog.Infof("#####:first request,con.ConID: %v", con.ConID)
 	}
 	con.mu.Unlock()
 
@@ -671,6 +679,7 @@ func (s *DiscoveryServer) DeltaAggregatedResources(stream ads.AggregatedDiscover
 func (s *DiscoveryServer) pushConnection(con *XdsConnection, pushEv *XdsEvent) error {
 	// TODO: update the service deps based on NetworkScope
 
+	adsLog.Infof("#####:pushConnection:pushEv:%v,pushEv.edsUpdatedServices:%v", pushEv, pushEv.edsUpdatedServices)
 	if pushEv.edsUpdatedServices != nil {
 		// Push only EDS. This is indexed already - push immediately
 		// (may need a throttle)

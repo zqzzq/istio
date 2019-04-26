@@ -496,6 +496,7 @@ func (c *Controller) GetProxyServiceInstances(proxy *model.Proxy) ([]*model.Serv
 		// failover to 2
 		svcLister := listerv1.NewServiceLister(c.services.informer.GetIndexer())
 		if services, err := svcLister.GetPodServices(pod); err == nil && len(services) > 0 {
+			fmt.Printf("#####:GetPodServices(pod):len(services):%v, services:%v", len(services), services)
 			for _, svc := range services {
 				out = append(out, c.getProxyServiceInstancesByPod(pod, svc, proxy)...)
 			}
@@ -601,7 +602,7 @@ func (c *Controller) getProxyServiceInstancesByPod(pod *v1.Pod, service *v1.Serv
 		out = append(out, c.getEndpoints(proxyIP, int32(portNum), svcPort, svc))
 
 	}
-
+	fmt.Printf("#####:getProxyServiceInstancesByPod:len(ServiceInstance):%v,ServiceInstance:%v", len(out), out)
 	return out
 }
 

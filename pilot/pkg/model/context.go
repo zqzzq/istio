@@ -202,6 +202,7 @@ func (node *Proxy) SetSidecarScope(ps *PushContext) {
 
 func (node *Proxy) SetServiceInstances(env *Environment) error {
 	instances, err := env.GetProxyServiceInstances(node)
+	fmt.Printf("####:proxy . SetServiceInstances:len(instances):%v, instances:%v", len(instances), instances)
 	if err != nil {
 		log.Errorf("failed to get service proxy service instances: %v", err)
 		return err
@@ -297,6 +298,8 @@ func ParseServiceNodeWithMetadata(s string, metadata map[string]string) (*Proxy,
 
 	out.ID = parts[2]
 	out.DNSDomain = parts[3]
+	fmt.Println("#####:req metadata map :%v", metadata)
+	fmt.Println("#####:ParseServiceNodeWithMetadata:proxy :%v", out)
 	return out, nil
 }
 

@@ -22,6 +22,7 @@ import (
 
 	"github.com/prometheus/client_golang/prometheus"
 
+	"fmt"
 	networking "istio.io/api/networking/v1alpha3"
 )
 
@@ -601,6 +602,7 @@ func (ps *PushContext) InitContext(env *Environment) error {
 // of hostname to service
 func (ps *PushContext) initServiceRegistry(env *Environment) error {
 	services, err := env.Services()
+	fmt.Printf("#####:initServiceRegistry:len(services): %v, services[0]:%v", len(services), *services[0])
 	if err != nil {
 		return err
 	}
@@ -624,7 +626,10 @@ func (ps *PushContext) initServiceRegistry(env *Environment) error {
 		ps.ServiceByHostname[s.Hostname] = s
 		ps.ServicePort2Name[string(s.Hostname)] = s.Ports
 	}
-
+	fmt.Println("#####:ps.privateServicesByNamespace: ", ps.privateServicesByNamespace)
+	fmt.Println("#####:ps.publicServices[0]: ", *ps.publicServices[0])
+	fmt.Println("#####:ps.ServiceByHostname: ", ps.ServiceByHostname)
+	fmt.Println("#####:ps.ServicePort2Name: ", ps.ServicePort2Name)
 	ps.initServiceAccounts(env, allServices)
 
 	return nil
@@ -657,7 +662,7 @@ func (ps *PushContext) initVirtualServices(env *Environment) error {
 	if err != nil {
 		return err
 	}
-
+	fmt.Printf("#####:initVirtualServices:len(virtualervices): %v, virtualservices[0]:%v", len(vservices), vservices[0])
 	// TODO(rshriram): parse each virtual service and maintain a map of the
 	// virtualservice name, the list of registry hosts in the VS and non
 	// registry DNS names in the VS.  This should cut down processing in
@@ -746,7 +751,8 @@ func (ps *PushContext) initVirtualServices(env *Environment) error {
 			}
 		}
 	}
-
+	fmt.Println("#####:ps.privateVirtualServicesByNamespace:", ps.privateVirtualServicesByNamespace)
+	fmt.Println("#####:ps.publicVirtualServices:", ps.publicVirtualServices)
 	return nil
 }
 
@@ -857,6 +863,7 @@ func (ps *PushContext) initDestinationRules(env *Environment) error {
 	if err != nil {
 		return err
 	}
+	fmt.Printf("#####:initDestinationRules:len(configs): %v, configs[0]:%v", len(configs), configs[0])
 	ps.SetDestinationRules(configs)
 	return nil
 }
@@ -947,6 +954,9 @@ func (ps *PushContext) SetDestinationRules(configs []Config) {
 	ps.namespaceLocalDestRules = namespaceLocalDestRules
 	ps.namespaceExportedDestRules = namespaceExportedDestRules
 	ps.allExportedDestRules = allExportedDestRules
+	fmt.Println("#####:ps.namespaceLocalDestRules:", ps.namespaceLocalDestRules)
+	fmt.Println("#####:ps.namespaceExportedDestRules:", ps.namespaceExportedDestRules)
+	fmt.Println("#####:ps.allExportedDestRules:", ps.allExportedDestRules)
 }
 
 func (ps *PushContext) initAuthorizationPolicies(env *Environment) error {
