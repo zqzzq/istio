@@ -597,12 +597,20 @@ func (ps *PushContext) InitContext(env *Environment) error {
 	ps.initDone = true
 	return nil
 }
+func If(b bool, t, f interface{}) interface{} {
+	if b {
+		return t
+	}
+	return f
+}
 
 // Caches list of services in the registry, and creates a map
 // of hostname to service
 func (ps *PushContext) initServiceRegistry(env *Environment) error {
 	services, err := env.Services()
-	fmt.Printf("#####:initServiceRegistry:len(services): %v, services[0]:%v", len(services), *services[0])
+	//len(services): 351, services[0]:{aaa-selenium-my-charts.selenium1.svc.cluster.local 158.158.1.78 {{0 0} 0 0 0 0} map[Kubernetes:158.158.1.78] [0xc001afef90] [] false 0 2019-04-23 08:19:37 +0000 UTC {aaa-selenium-my-charts selenium
+	//1 istio://selenium1/services/aaa-selenium-my-charts map[]}}
+	fmt.Printf("#####:initServiceRegistry:len(services): %v, services[0]:%v", len(services), If(len(services) == 0, nil, *services[0]))
 	if err != nil {
 		return err
 	}
@@ -626,9 +634,16 @@ func (ps *PushContext) initServiceRegistry(env *Environment) error {
 		ps.ServiceByHostname[s.Hostname] = s
 		ps.ServicePort2Name[string(s.Hostname)] = s.Ports
 	}
+	//ps.privateServicesByNamespace:  map[]
 	fmt.Println("#####:ps.privateServicesByNamespace: ", ps.privateServicesByNamespace)
+	//ps.publicServices[0]:  {kube-dns.kube-system.svc.cluster.local 158.158.0.3 {{0 0} 0 0 0 0} map[Kubernetes:158.158.0.3] [0xc0006f0570 0xc0006f0630] [] false 0 2018-06-27 07:47:32 +0000 UTC {kube-dns kube-system istio://kube-system/services/kube-dns ma
+	//p[]}}
 	fmt.Println("#####:ps.publicServices[0]: ", *ps.publicServices[0])
+	//ps.ServiceByHostname:  map[zookeeper.logging.svc.cluster.local:0xc001afa9c0 yqqtest6-iot-redis4-ha-cli.iot.svc.cluster.local:0xc001af3520 iot1t3nkwfb-iot-emq-service-out.iot.svc.cluster.local:0xc001afb930 iot54wztjqj-iot-emq-service-in.iot.svc.cluste
+	//r.local:0xc001b1c0d0 .....
 	fmt.Println("#####:ps.ServiceByHostname: ", ps.ServiceByHostname)
+	//ps.ServicePort2Name:  map[keystone.kube-system.svc.cluster.local:[0xc001808690 0xc001808840] klq-po-keeper-headless.default.svc.cluster.local:[0xc001b18120] app-obl8a-default-svc.selenium1.svc.cluster.local:[0xc001b28810] ertyuiop-proxy.selenium2.svc
+	//.cluster.local:[0xc000e1dcb0]
 	fmt.Println("#####:ps.ServicePort2Name: ", ps.ServicePort2Name)
 	ps.initServiceAccounts(env, allServices)
 
@@ -662,7 +677,10 @@ func (ps *PushContext) initVirtualServices(env *Environment) error {
 	if err != nil {
 		return err
 	}
-	fmt.Printf("#####:initVirtualServices:len(virtualervices): %v, virtualservices[0]:%v", len(vservices), vservices[0])
+	//initVirtualServices:len(virtualervices): 276, virtualservices[0]:{{virtual-service networking v1alpha3 redis4-u4ya77u1-cli istio-system cluster.local map[release:redis4-u4ya77u1 chart:redis4 env:9439c591-b8c9-486d-8793-8d8f8eb9f292 name:redis4-u4ya77
+	//u1-cli] map[] 31454451 2018-10-10 03:39:26 +0000 UTC} hosts:"rdscli.10.110.25.114.xip.io" gateways:"default" http:<match:<uri:<prefix:"/redis4-u4ya77u1-cli/" > > route:<destination:<host:"redis4-u4ya77u1-cli.db.svc" > > rewrite:<uri:"/" > websocket_upgrade
+	//:true > }
+	fmt.Printf("#####:initVirtualServices:len(virtualervices): %v, virtualservices[0]:%v", len(vservices), If(len(vservices) == 0, nil, vservices[0]))
 	// TODO(rshriram): parse each virtual service and maintain a map of the
 	// virtualservice name, the list of registry hosts in the VS and non
 	// registry DNS names in the VS.  This should cut down processing in
@@ -751,7 +769,12 @@ func (ps *PushContext) initVirtualServices(env *Environment) error {
 			}
 		}
 	}
+	//ps.privateVirtualServicesByNamespace: map[]
 	fmt.Println("#####:ps.privateVirtualServicesByNamespace:", ps.privateVirtualServicesByNamespace)
+	//ps.publicVirtualServices: [{{virtual-service networking v1alpha3 zs-virtual default cluster.local map[] map[] 10845107 2018-08-08 02:58:14 +0000 UTC} hosts:"zs-v.10.110.25.114.xip.io" gateways:"default/default" http:<route:<destination:<host:"www.bai
+	//du.com" > > > } {{virtual-service networking v1alpha3 app-22fnrw8q-deploy-z9c52bkn-default istio-system cluster.local map[user_group:group-ioptest app:app-22fnrw8q-deploy-z9c52bkn appinstance:app-22fnrw8q-deploy-z9c52bkn application:app-22fnrw8q user:iopde
+	//v] map[] 14212457 2018-08-20 01:19:04 +0000 UTC} hosts:"app-22fnrw8q-deploy-z9c52bkn.default.10.110.25.114.xip.io" gateways:"istio-system/default" http:<match:<uri:<prefix:"/" > > route:<destination:<host:"app-22fnrw8q-deploy-z9c52bkn-default-svc.default.s
+	//vc.cluster.local" > > > } .....
 	fmt.Println("#####:ps.publicVirtualServices:", ps.publicVirtualServices)
 	return nil
 }
@@ -863,7 +886,11 @@ func (ps *PushContext) initDestinationRules(env *Environment) error {
 	if err != nil {
 		return err
 	}
-	fmt.Printf("#####:initDestinationRules:len(configs): %v, configs[0]:%v", len(configs), configs[0])
+
+	//{{destination-rule networking v1alpha3 app-wgtestsss-rollingupdate default cluster.local map[app:app-wgtestsss appinstance:app-wgtestsss application:app-62h6hv25 user:iopdev user_group:group-cloud-op
+	//	erator] map[] 141083231 2019-03-26 11:02:59 +0000 UTC} host:"app-wgtestsss-default-svc.default.svc.cluster.local" subsets:<name:"rollingupdate" labels:<key:"route_tag" value:"rollingupdate" > > }
+
+	fmt.Printf("#####:initDestinationRules:len(configs): %v, configs[0]:%v", len(configs), If(len(configs) == 0, nil, configs[0]))
 	ps.SetDestinationRules(configs)
 	return nil
 }
@@ -954,8 +981,13 @@ func (ps *PushContext) SetDestinationRules(configs []Config) {
 	ps.namespaceLocalDestRules = namespaceLocalDestRules
 	ps.namespaceExportedDestRules = namespaceExportedDestRules
 	ps.allExportedDestRules = allExportedDestRules
+	//ps.namespaceLocalDestRules: map[selenium1:0xc0006482e0
+	//default:0xc000648380 iam:0xc000648400 selenium2:0xc0006484e0 test13:0xc0006486a0 iop-test:0xc0006488a0 istio-system:0xc0006480c0]
 	fmt.Println("#####:ps.namespaceLocalDestRules:", ps.namespaceLocalDestRules)
+	//ps.namespaceExportedDestRules: map[selenium1:0xc000648320 default:0xc0006483a0 iam:0xc000648480 selenium2:0xc000648520 test13:0xc000648780 iop-test:0xc0006488c0 istio-system:0xc0006480e0]
 	fmt.Println("#####:ps.namespaceExportedDestRules:", ps.namespaceExportedDestRules)
+	//ps.allExportedDestRules: &{[app-lpqzckxs-instance-4sn24h9f-default-svc.selenium1.svc.cluster.local app-lpqzckxs-instance-79kqxgpm-default-svc.selenium1.svc.cluster.local app-lpqzckxs-instance-bmg2rmbj-default-svc.selenium1.svc.cluster.local app-lpqzc
+	//kxs-instance-nnm654c4-default-svc.selenium1.svc.cluster.local .....
 	fmt.Println("#####:ps.allExportedDestRules:", ps.allExportedDestRules)
 }
 

@@ -471,6 +471,8 @@ type ServiceAttributes struct {
 type ServiceDiscovery interface {
 	// Services list declarations of all services in the system
 	Services() ([]*Service, error)
+	//{aaa-selenium-my-charts.selenium1.svc.cluster.local 158.158.1.78 {{0 0} 0 0 0 0} map[Kubernetes:158.158.1.78] [0xc001afef90] [] false 0 2019-04-23 08:19:37 +0000 UTC {aaa-selenium-my-charts selenium
+	//1 istio://selenium1/services/aaa-selenium-my-charts map[]}}
 
 	// GetService retrieves a service by host name if it exists
 	// Deprecated - do not use for anything other than tests
