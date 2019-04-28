@@ -610,7 +610,7 @@ func (ps *PushContext) initServiceRegistry(env *Environment) error {
 	services, err := env.Services()
 	//len(services): 351, services[0]:{aaa-selenium-my-charts.selenium1.svc.cluster.local 158.158.1.78 {{0 0} 0 0 0 0} map[Kubernetes:158.158.1.78] [0xc001afef90] [] false 0 2019-04-23 08:19:37 +0000 UTC {aaa-selenium-my-charts selenium
 	//1 istio://selenium1/services/aaa-selenium-my-charts map[]}}
-	fmt.Printf("#####:initServiceRegistry:len(services): %v, services[0]:%v", len(services), If(len(services) == 0, nil, *services[0]))
+	fmt.Printf("#####:initServiceRegistry:len(services): %v", len(services))
 	if err != nil {
 		return err
 	}
@@ -680,7 +680,7 @@ func (ps *PushContext) initVirtualServices(env *Environment) error {
 	//initVirtualServices:len(virtualervices): 276, virtualservices[0]:{{virtual-service networking v1alpha3 redis4-u4ya77u1-cli istio-system cluster.local map[release:redis4-u4ya77u1 chart:redis4 env:9439c591-b8c9-486d-8793-8d8f8eb9f292 name:redis4-u4ya77
 	//u1-cli] map[] 31454451 2018-10-10 03:39:26 +0000 UTC} hosts:"rdscli.10.110.25.114.xip.io" gateways:"default" http:<match:<uri:<prefix:"/redis4-u4ya77u1-cli/" > > route:<destination:<host:"redis4-u4ya77u1-cli.db.svc" > > rewrite:<uri:"/" > websocket_upgrade
 	//:true > }
-	fmt.Printf("#####:initVirtualServices:len(virtualervices): %v, virtualservices[0]:%v", len(vservices), If(len(vservices) == 0, nil, vservices[0]))
+	fmt.Printf("#####:initVirtualServices:len(virtualervices): %v", len(vservices))
 	// TODO(rshriram): parse each virtual service and maintain a map of the
 	// virtualservice name, the list of registry hosts in the VS and non
 	// registry DNS names in the VS.  This should cut down processing in
@@ -890,7 +890,7 @@ func (ps *PushContext) initDestinationRules(env *Environment) error {
 	//{{destination-rule networking v1alpha3 app-wgtestsss-rollingupdate default cluster.local map[app:app-wgtestsss appinstance:app-wgtestsss application:app-62h6hv25 user:iopdev user_group:group-cloud-op
 	//	erator] map[] 141083231 2019-03-26 11:02:59 +0000 UTC} host:"app-wgtestsss-default-svc.default.svc.cluster.local" subsets:<name:"rollingupdate" labels:<key:"route_tag" value:"rollingupdate" > > }
 
-	fmt.Printf("#####:initDestinationRules:len(configs): %v, configs[0]:%v", len(configs), If(len(configs) == 0, nil, configs[0]))
+	fmt.Printf("#####:initDestinationRules:len(configs): %v", len(configs))
 	ps.SetDestinationRules(configs)
 	return nil
 }
