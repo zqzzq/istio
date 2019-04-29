@@ -803,6 +803,7 @@ func (c *Controller) updateEDS(ep *v1.Endpoints, event model.Event) {
 	// TODO: Endpoints include the service labels, maybe we can use them ?
 	// nodeName is also included, not needed
 
+	//Handle EDS endpoint reviews in namespace test13 -> [{[{158.158.110.172  0xc426694ba0 &ObjectReference{Kind:Pod,Namespace:test13,Name:reviews-v1-549bd9ccf6-kjhv9,UID:bd0bba14-6562-11e9-93c0-6c92bf744022,APIVersion:,ResourceVersion:162504602,FieldPath:,}} {158.158.111.140  0xc426694bb0 &ObjectReference{Kind:Pod,Namespace:test13,Name:reviews-v2-56985f9db4-q8p7k,UID:149b0b64-6745-11e9-93c0-6c92bf744022,APIVersion:,ResourceVersion:167312361,FieldPath:,}} {158.158.68.151  0xc426694bd0 &ObjectReference{Kind:Pod,Namespace:test13,Name:reviews-v2-6fbd8b8bd-8ns64,UID:bd57174b-6562-11e9-93c0-6c92bf744022,APIVersion:,ResourceVersion:162505557,FieldPath:,}} {158.158.76.164  0xc426694be0 &ObjectReference{Kind:Pod,Namespace:test13,Name:reviews-v2-56985f9db4-blzrd,UID:e614a666-6745-11e9-93c0-6c92bf744022,APIVersion:,ResourceVersion:167313526,FieldPath:,}}] [] [{http 9080 TCP}]}] [0xc44042c090 0xc44042c120 0xc44042c1b0 0xc44042c240]
 	log.Infof("Handle EDS endpoint %s in namespace %s -> %v %v", ep.Name, ep.Namespace, ep.Subsets, endpoints)
 
 	_ = c.XDSUpdater.EDSUpdate(c.ClusterID, string(hostname), endpoints)

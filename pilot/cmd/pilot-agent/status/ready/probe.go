@@ -52,6 +52,9 @@ func (p *Probe) checkInboundConfigured() error {
 		// which ports are defined by the service, just ensure that at least one container port has a cluster/listener
 		// confuration in Envoy. The CDS/LDS updates will contain everything, so just ensuring at least one port has
 		// been configured should be sufficient.
+
+		//* failed checking application ports. listeners="0.0.0.0:15090",...
+		//* envoy missing listener for inbound application port: 8080
 		for _, appPort := range p.ApplicationPorts {
 			if listeningPorts[appPort] {
 				// Success - Envoy is configured.
