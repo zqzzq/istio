@@ -25,7 +25,6 @@ import (
 	"golang.org/x/time/rate"
 	"google.golang.org/grpc"
 
-	"fmt"
 	"istio.io/istio/pilot/pkg/model"
 	"istio.io/istio/pilot/pkg/networking/core"
 	"istio.io/istio/pilot/pkg/serviceregistry/kube"
@@ -357,7 +356,8 @@ func (s *DiscoveryServer) doPush(full bool) {
 	// Reset - any new updates will be tracked by the new map
 	s.edsUpdates = map[string]struct{}{}
 	s.mutex.Unlock()
-	fmt.Println("#####:doPush:edsUpdates: ", edsUpdates)
+	//doPush:edsUpdates:  map[app-m15ay-default-svc.iam.svc.cluster.local:{} kafka-manager.monitoring.svc.cluster.local:{} iot11smmxvo-iot-emq-service-out.iot.svc.cluster.local:{} servicegraph.istio-system.svc.cluster.local:{} app-nj861-default-svc.default.svc.cluster.local:{}
+	//fmt.Println("#####:doPush:edsUpdates: ", edsUpdates)
 	s.Push(full, edsUpdates)
 }
 
