@@ -343,7 +343,8 @@ func receiveThread(con *XdsConnection, reqChannel chan *xdsapi.DiscoveryRequest,
 	defer close(reqChannel) // indicates close of the remote side.
 	for {
 		req, err := con.stream.Recv()
-		adsLog.Infof("#####:req:%v", *req)
+		//req:{2019-04-29T03:46:56Z/4115 id:"sidecar~158.158.76.162~app-86458-6ccdd4bf7b-8559p.default~default.svc.cluster.local" cluster:"app-86458.default" metadata:<fields:<key:"CONFIG_NAMESPACE" value:<string_value:"default" > > fields:<key:"INTERCEPTION_MODE" value:<string_value:"REDIRECT" > > fields:<key:"ISTIO_META_INSTANCE_IPS" value:<string_value:"158.158.76.162,158.158.76.162,fe80::fc44:9cff:fe5e:134e" > > fields:<key:"ISTIO_PROXY_SHA" value:<string_value:"istio-proxy:a169a0c0cd86b51538c240e2d037fa8f7f5860ae" > > fields:<key:"ISTIO_PROXY_VERSION" value:<string_value:"1.1.3" > > fields:<key:"ISTIO_VERSION" value:<string_value:"1.1.3" > > fields:<key:"POD_NAME" value:<string_value:"app-86458-6ccdd4bf7b-8559p" > > fields:<key:"app" value:<string_value:"app-86458" > > fields:<key:"appinstance" value:<string_value:"app-86458" > > fields:<key:"application" value:<string_value:"app-2g7rj7zr" > > fields:<key:"cluster.inspur.com/container-image" value:<string_value:"{\"container-001\":\"registry.cluster11.com:5000/trident_iopdev/cluster/iop-clustermgr:4.5.0\"}" > > fields:<key:"deployment" value:<string_value:"app-86458" > > fields:<key:"deployment.inspur.com/role" value:<string_value:"rollingupdate" > > fields:<key:"istio" value:<string_value:"sidecar" > > fields:<key:"kubernetes.io/change-cause" value:<string_value:"\345\272\224\347\224\250\345\210\235\345\247\213\345\214\226\351\203\250\347\275\262" > > fields:<key:"pod-template-hash" value:<string_value:"2778806936" > > fields:<key:"sidecar.istio.io/inject" value:<string_value:"true" > > fields:<key:"user" value:<string_value:"iopdev" > > fields:<key:"user_group" value:<string_value:"group-cloud-operator" > > fields:<key:"version" value:<string_value:"rollingupdate" > > > locality:<> build_version:"a169a0c0cd86b51538c240e2d037fa8f7f5860ae/1.11.0-dev/Clean/RELEASE/BoringSSL"  [] type.googleapis.com/envoy.api.v2.Cluster 0bdfa40b-a161-4886-a301-9218ec83a509 nil {} [] 0}
+		//adsLog.Infof("#####:req:%v", *req)
 		if err != nil {
 			if status.Code(err) == codes.Canceled || err == io.EOF {
 				con.mu.RLock()
@@ -372,7 +373,8 @@ func (s *DiscoveryServer) StreamAggregatedResources(stream ads.AggregatedDiscove
 	if ok {
 		peerAddr = peerInfo.Addr.String()
 	}
-	adsLog.Infof("#####peerAddr:%v", peerAddr)
+	//peerAddr:158.158.76.162:35370
+	//adsLog.Infof("#####peerAddr:%v", peerAddr)
 	t0 := time.Now()
 	// rate limit the herd, after restart all endpoints will reconnect to the
 	// poor new pilot and overwhelm it.
@@ -392,7 +394,8 @@ func (s *DiscoveryServer) StreamAggregatedResources(stream ads.AggregatedDiscove
 		return err
 	}
 	con := newXdsConnection(peerAddr, stream)
-	adsLog.Infof("#####con:%v", *con)
+	//con:{{{0 0} 0 0 0 0} 158.158.76.162:35370 2019-04-29 03:47:03.284018495 +0000 UTC m=+0.582242201  <nil> 0xc0001089c0 [] map[] []          0 [] 0xc001b14090 [] false false false 0001-01-01 00:00:00 +0000 UTC 0001-01-01 00:00:00 +0000 UTC {0 0}}
+	//adsLog.Infof("#####con:%v", *con)
 
 	// Do not call: defer close(con.pushChannel) !
 	// the push channel will be garbage collected when the connection is no longer used.
@@ -412,7 +415,8 @@ func (s *DiscoveryServer) StreamAggregatedResources(stream ads.AggregatedDiscove
 		// Block until either a request is received or a push is triggered.
 		select {
 		case discReq, ok := <-reqChannel:
-			adsLog.Infof("#####discReq from reqChannel:%v | discReq.string():%v", *discReq, discReq.String())
+			//discReq from reqChannel:{2019-04-29T03:46:56Z/4115 id:"sidecar~158.158.76.162~app-86458-6ccdd4bf7b-8559p.default~default.svc.cluster.local" cluster:"app-86458.default" metadata:<fields:<key:"CONFIG_NAMESPACE" value:<string_value:"default" > > fields:<key:"INTERCEPTION_MODE" value:<string_value:"REDIRECT" > > fields:<key:"ISTIO_META_INSTANCE_IPS" value:<string_value:"158.158.76.162,158.158.76.162,fe80::fc44:9cff:fe5e:134e" > > fields:<key:"ISTIO_PROXY_SHA" value:<string_value:"istio-proxy:a169a0c0cd86b51538c240e2d037fa8f7f5860ae" > > fields:<key:"ISTIO_PROXY_VERSION" value:<string_value:"1.1.3" > > fields:<key:"ISTIO_VERSION" value:<string_value:"1.1.3" > > fields:<key:"POD_NAME" value:<string_value:"app-86458-6ccdd4bf7b-8559p" > > fields:<key:"app" value:<string_value:"app-86458" > > fields:<key:"appinstance" value:<string_value:"app-86458" > > fields:<key:"application" value:<string_value:"app-2g7rj7zr" > > fields:<key:"cluster.inspur.com/container-image" value:<string_value:"{\"container-001\":\"registry.cluster11.com:5000/trident_iopdev/cluster/iop-clustermgr:4.5.0\"}" > > fields:<key:"deployment" value:<string_value:"app-86458" > > fields:<key:"deployment.inspur.com/role" value:<string_value:"rollingupdate" > > fields:<key:"istio" value:<string_value:"sidecar" > > fields:<key:"kubernetes.io/change-cause" value:<string_value:"\345\272\224\347\224\250\345\210\235\345\247\213\345\214\226\351\203\250\347\275\262" > > fields:<key:"pod-template-hash" value:<string_value:"2778806936" > > fields:<key:"sidecar.istio.io/inject" value:<string_value:"true" > > fields:<key:"user" value:<string_value:"iopdev" > > fields:<key:"user_group" value:<string_value:"group-cloud-operator" > > fields:<key:"version" value:<string_value:"rollingupdate" > > > locality:<> build_version:"a169a0c0cd86b51538c240e2d037fa8f7f5860ae/1.11.0-dev/Clean/RELEASE/BoringSSL"  [] type.googleapis.com/envoy.api.v2.Cluster 0bdfa40b-a161-4886-a301-9218ec83a509 nil {} [] 0} | discReq.string():version_info:"2019-04-29T03:46:56Z/4115" node:<id:"sidecar~158.158.76.162~app-86458-6ccdd4bf7b-8559p.default~default.svc.cluster.local" cluster:"app-86458.default" metadata:<fields:<key:"CONFIG_NAMESPACE" value:<string_value:"default" > > fields:<key:"INTERCEPTION_MODE" value:<string_value:"REDIRECT" > > fields:<key:"ISTIO_META_INSTANCE_IPS" value:<string_value:"158.158.76.162,158.158.76.162,fe80::fc44:9cff:fe5e:134e" > > fields:<key:"ISTIO_PROXY_SHA" value:<string_value:"istio-proxy:a169a0c0cd86b51538c240e2d037fa8f7f5860ae" > > fields:<key:"ISTIO_PROXY_VERSION" value:<string_value:"1.1.3" > > fields:<key:"ISTIO_VERSION" value:<string_value:"1.1.3" > > fields:<key:"POD_NAME" value:<string_value:"app-86458-6ccdd4bf7b-8559p" > > fields:<key:"app" value:<string_value:"app-86458" > > fields:<key:"appinstance" value:<string_value:"app-86458" > > fields:<key:"application" value:<string_value:"app-2g7rj7zr" > > fields:<key:"cluster.inspur.com/container-image" value:<string_value:"{\"container-001\":\"registry.cluster11.com:5000/trident_iopdev/cluster/iop-clustermgr:4.5.0\"}" > > fields:<key:"deployment" value:<string_value:"app-86458" > > fields:<key:"deployment.inspur.com/role" value:<string_value:"rollingupdate" > > fields:<key:"istio" value:<string_value:"sidecar" > > fields:<key:"kubernetes.io/change-cause" value:<string_value:"\345\272\224\347\224\250\345\210\235\345\247\213\345\214\226\351\203\250\347\275\262" > > fields:<key:"pod-template-hash" value:<string_value:"2778806936" > > fields:<key:"sidecar.istio.io/inject" value:<string_value:"true" > > fields:<key:"user" value:<string_value:"iopdev" > > fields:<key:"user_group" value:<string_value:"group-cloud-operator" > > fields:<key:"version" value:<string_value:"rollingupdate" > > > locality:<> build_version:"a169a0c0cd86b51538c240e2d037fa8f7f5860ae/1.11.0-dev/Clean/RELEASE/BoringSSL" > type_url:"type.googleapis.com/envoy.api.v2.Cluster" response_nonce:"0bdfa40b-a161-4886-a301-9218ec83a509"
+			//	adsLog.Infof("#####discReq from reqChannel:%v | discReq.string():%v", *discReq, discReq.String())
 			if !ok {
 				// Remote side closed connection.
 				return receiveError
@@ -475,7 +479,8 @@ func (s *DiscoveryServer) StreamAggregatedResources(stream ads.AggregatedDiscove
 					continue
 				}
 				routes := discReq.GetResourceNames()
-				adsLog.Infof("#####:GetResourceNames:len(routes):%v, routes:%v", len(routes), routes)
+				//GetResourceNames:len(routes):131, routes:[14082 28765 4821 27002 9900 27774 7969 15182 27949 19736 10224 28521 22125 12301 11955 10760 16603 14042 2407 14797 26929 8937 16100 12263 9572 27580 13281 32763 22460 9428 10696 18777 2068 15014 5057 3806 29449 17903 26379
+				//adsLog.Infof("#####:GetResourceNames:len(routes):%v, routes:%v", len(routes), routes)
 				var sortedRoutes []string
 				if discReq.ResponseNonce != "" {
 					con.mu.RLock()
@@ -533,7 +538,8 @@ func (s *DiscoveryServer) StreamAggregatedResources(stream ads.AggregatedDiscove
 					continue
 				}
 				clusters := discReq.GetResourceNames()
-				adsLog.Infof("#####:GetResourceNames:len(clusters):%v, clusters:%v", len(clusters), clusters)
+				//GetResourceNames:len(clusters):526, clusters:[outbound|4242||testjob-opentsdb-svc.default.svc.cluster.local outbound|4242||testjob-opentsdb-svc-nodeport.default.svc.cluster.local outbound|14082|rollingupdate|app-o8ctm-default-svc.default.svc.cluster.local
+				//adsLog.Infof("#####:GetResourceNames:len(clusters):%v, clusters:%v", len(clusters), clusters)
 				if clusters == nil && discReq.ResponseNonce != "" {
 					// There is no requirement that ACK includes clusters. The test doesn't.
 					con.mu.Lock()
@@ -546,7 +552,8 @@ func (s *DiscoveryServer) StreamAggregatedResources(stream ads.AggregatedDiscove
 					continue
 				}
 				if len(clusters) == len(con.Clusters) {
-					adsLog.Infof("#####:len(con.Clusters):%v, con.Clusters:%v", len(con.Clusters), con.Clusters)
+					//len(con.Clusters):531, con.Clusters:[outbound|10000||spark-resource-staging-service.default.svc.cluster.local outbound|10032|canary|app-mryhy-default-svc.selenium1.svc.cluster.local outbound|10032|stable|app-mryhy-default-svc.selenium1.svc.cluster.local
+					//adsLog.Infof("#####:len(con.Clusters):%v, con.Clusters:%v", len(con.Clusters), con.Clusters)
 					sort.Strings(clusters)
 					sort.Strings(con.Clusters)
 
@@ -658,10 +665,12 @@ func (s *DiscoveryServer) initConnectionNode(discReq *xdsapi.DiscoveryRequest, c
 
 	con.mu.Lock()
 	con.modelNode = nt
+	//:con.modelNode/proxy: {Kubernetes sidecar [158.158.116.30] app-nbksp-744c8c9f-ldc8r.default  default.svc.cluster.local    default map[deployment:app-nbksp user:iopdev ISTIO_PROXY_SHA:istio-proxy:55c80965eab994e6bfa2227e3942fa89928d0d70 user_group:group-cloud-operator POD_NAME:app-nbksp-744c8c9f-ldc8r application:app-2g7rj7zr app:app-nbksp INTERCEPTION_MODE:REDIRECT ISTIO_PROXY_VERSION:1.1.2 pod-template-hash:30074759 ISTIO_META_INSTANCE_IPS:158.158.116.30,158.158.116.30,fe80::3863:faff:febc:69dc CONFIG_NAMESPACE:default cluster.inspur.com/container-image:{"container-001":"registry.cluster11.com:5000/trident_iopdev/demo-test:latest"} version:rollingupdate deployment.inspur.com/role:rollingupdate appinstance:app-nbksp ISTIO_VERSION:1.0-dev kubernetes.io/change-cause:应用初始化部署 sidecar.istio.io/inject:true istio:sidecar] 0xc000665450 [0xc00082d580]}
 	adsLog.Infof("#####:con.modelNode/proxy: %v", *nt)
 	if con.ConID == "" {
 		// first request
 		con.ConID = connectionID(discReq.Node.Id)
+		//first request,con.ConID: sidecar~158.158.116.12~app-inijz-fj9zq-699d86c8c-ms7qg.default~default.svc.cluster.local-52
 		adsLog.Infof("#####:first request,con.ConID: %v", con.ConID)
 	}
 	con.mu.Unlock()

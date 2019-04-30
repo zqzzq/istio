@@ -496,6 +496,7 @@ func (c *Controller) GetProxyServiceInstances(proxy *model.Proxy) ([]*model.Serv
 		// failover to 2
 		svcLister := listerv1.NewServiceLister(c.services.informer.GetIndexer())
 		if services, err := svcLister.GetPodServices(pod); err == nil && len(services) > 0 {
+			//GetPodServices(pod):len(services):1, services:[&Service{ObjectMeta:k8s_io_apimachinery_pkg_apis_meta_v1.ObjectMeta{Name:app-nbksp-default-svc,GenerateName:,Namespace:default,SelfLink:/api/v1/namespaces/default/services/app-nbksp-default-svc,UID:765769e9-5b37-11e9-be1a-6c92bf743ff6,ResourceVersion:147014331,Generation:0,CreationTimestamp:2019-04-10 02:22:17 +0000 UTC,DeletionTimestamp:<nil>,DeletionGracePeriodSeconds:nil,Labels:map[string]string{app: app-nbksp,appinstance: app-nbksp,application: app-2g7rj7zr,user: iopdev,user_group: group-cloud-operator,},Annotations:map[string]string{},OwnerReferences:[],Finalizers:[],ClusterName:,Initializers:nil,},Spec:ServiceSpec{Ports:[{http-27650-8080-495ps TCP 27650 {0 8080 } 0}],Selector:map[string]string{app: app-nbksp,appinstance: app-nbksp,application: app-2g7rj7zr,user: iopdev,user_group: group-cloud-operator,},ClusterIP:158.158.14.68,Type:ClusterIP,ExternalIPs:[],SessionAffinity:None,LoadBalancerIP:,LoadBalancerSourceRanges:[],ExternalName:,ExternalTrafficPolicy:,HealthCheckNodePort:0,PublishNotReadyAddresses:false,SessionAffinityConfig:nil,},Status:ServiceStatus{LoadBalancer:LoadBalancerStatus{Ingress:[],},},}]
 			fmt.Printf("#####:GetPodServices(pod):len(services):%v, services:%v", len(services), services)
 			for _, svc := range services {
 				out = append(out, c.getProxyServiceInstancesByPod(pod, svc, proxy)...)
@@ -602,6 +603,7 @@ func (c *Controller) getProxyServiceInstancesByPod(pod *v1.Pod, service *v1.Serv
 		out = append(out, c.getEndpoints(proxyIP, int32(portNum), svcPort, svc))
 
 	}
+	//getProxyServiceInstancesByPod:len(ServiceInstance):1,ServiceInstance:[0xc00082d580]
 	fmt.Printf("#####:getProxyServiceInstancesByPod:len(ServiceInstance):%v,ServiceInstance:%v", len(out), out)
 	return out
 }

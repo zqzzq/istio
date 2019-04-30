@@ -202,6 +202,7 @@ func (node *Proxy) SetSidecarScope(ps *PushContext) {
 
 func (node *Proxy) SetServiceInstances(env *Environment) error {
 	instances, err := env.GetProxyServiceInstances(node)
+	//proxy . SetServiceInstances:len(instances):1, instances:[0xc0007cc500]
 	fmt.Printf("####:proxy . SetServiceInstances:len(instances):%v, instances:%v", len(instances), instances)
 	if err != nil {
 		log.Errorf("failed to get service proxy service instances: %v", err)
@@ -298,8 +299,10 @@ func ParseServiceNodeWithMetadata(s string, metadata map[string]string) (*Proxy,
 
 	out.ID = parts[2]
 	out.DNSDomain = parts[3]
-	fmt.Println("#####:req metadata map :%v", metadata)
-	fmt.Println("#####:ParseServiceNodeWithMetadata:proxy :%v", out)
+	//req metadata map :%v map[user:iopdev istio:sidecar app:app-86458 deployment:app-86458 deployment.inspur.com/role:rollingupdate POD_NAME:app-86458-6ccdd4bf7b-8559p application:app-2g7rj7zr ISTIO_META_INSTANCE_IPS:158.158.76.162,158.158.76.162,fe80::fc44:9cff:fe5e:134e user_group:group-cloud-operator INTERCEPTION_MODE:REDIRECT ISTIO_VERSION:1.1.3 kubernetes.io/change-cause:应用初始化部署 sidecar.istio.io/inject:true CONFIG_NAMESPACE:default version:rollingupdate pod-template-hash:2778806936 ISTIO_PROXY_VERSION:1.1.3 ISTIO_PROXY_SHA:istio-proxy:a169a0c0cd86b51538c240e2d037fa8f7f5860ae cluster.inspur.com/container-image:{"container-001":"registry.cluster11.com:5000/trident_iopdev/cluster/iop-clustermgr:4.5.0"} appinstance:app-86458]
+	//fmt.Println("#####:req metadata map :%v", metadata)
+	//ParseServiceNodeWithMetadata:proxy :%v &{ sidecar [158.158.76.162] app-86458-6ccdd4bf7b-8559p.default <nil> default.svc.cluster.local     map[POD_NAME:app-86458-6ccdd4bf7b-8559p user:iopdev istio:sidecar app:app-86458 deployment:app-86458 deployment.inspur.com/role:rollingupdate INTERCEPTION_MODE:REDIRECT application:app-2g7rj7zr ISTIO_META_INSTANCE_IPS:158.158.76.162,158.158.76.162,fe80::fc44:9cff:fe5e:134e user_group:group-cloud-operator CONFIG_NAMESPACE:default ISTIO_VERSION:1.1.3 kubernetes.io/change-cause:应用初始化部署 sidecar.istio.io/inject:true appinstance:app-86458 version:rollingupdate pod-template-hash:2778806936 ISTIO_PROXY_VERSION:1.1.3 ISTIO_PROXY_SHA:istio-proxy:a169a0c0cd86b51538c240e2d037fa8f7f5860ae cluster.inspur.com/container-image:{"container-001":"registry.cluster11.com:5000/trident_iopdev/cluster/iop-clustermgr:4.5.0"}] <nil> []}
+	//fmt.Println("#####:ParseServiceNodeWithMetadata:proxy :%v", out)
 	return out, nil
 }
 
