@@ -203,7 +203,7 @@ func (node *Proxy) SetSidecarScope(ps *PushContext) {
 func (node *Proxy) SetServiceInstances(env *Environment) error {
 	instances, err := env.GetProxyServiceInstances(node)
 	//proxy . SetServiceInstances:len(instances):1, instances:[0xc0007cc500]
-	fmt.Printf("####:proxy . SetServiceInstances:len(instances):%v, instances:%v", len(instances), instances)
+	//fmt.Printf("####:proxy . SetServiceInstances:len(instances):%v, instances:%v", len(instances), instances)
 	if err != nil {
 		log.Errorf("failed to get service proxy service instances: %v", err)
 		return err

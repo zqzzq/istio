@@ -688,7 +688,7 @@ func (s *DiscoveryServer) DeltaAggregatedResources(stream ads.AggregatedDiscover
 func (s *DiscoveryServer) pushConnection(con *XdsConnection, pushEv *XdsEvent) error {
 	// TODO: update the service deps based on NetworkScope
 	//pushConnection:pushEv:&{map[] 0xc008394100 0xc0058764f8 2019-04-30T09:47:01Z/3},pushEv.edsUpdatedServices:map[]
-	adsLog.Infof("#####:pushConnection:pushEv:%v,pushEv.edsUpdatedServices:%v", pushEv, pushEv.edsUpdatedServices)
+	//	adsLog.Infof("#####:pushConnection:pushEv:%v,pushEv.edsUpdatedServices:%v", pushEv, pushEv.edsUpdatedServices)
 	if pushEv.edsUpdatedServices != nil {
 		// Push only EDS. This is indexed already - push immediately
 		// (may need a throttle)
