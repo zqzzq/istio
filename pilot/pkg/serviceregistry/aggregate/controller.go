@@ -19,6 +19,7 @@ import (
 
 	multierror "github.com/hashicorp/go-multierror"
 
+	"fmt"
 	"istio.io/istio/pilot/pkg/model"
 	"istio.io/istio/pilot/pkg/serviceregistry"
 	"istio.io/istio/pkg/log"
@@ -256,6 +257,7 @@ func (c *Controller) Run(stop <-chan struct{}) {
 // AppendServiceHandler implements a service catalog operation
 func (c *Controller) AppendServiceHandler(f func(*model.Service, model.Event)) error {
 	for _, r := range c.GetRegistries() {
+		fmt.Println("####:r.AppendServiceHandler(f):r:", r)
 		if err := r.AppendServiceHandler(f); err != nil {
 			log.Infof("Fail to append service handler to adapter %s", r.Name)
 			return err
@@ -267,6 +269,7 @@ func (c *Controller) AppendServiceHandler(f func(*model.Service, model.Event)) e
 // AppendInstanceHandler implements a service instance catalog operation
 func (c *Controller) AppendInstanceHandler(f func(*model.ServiceInstance, model.Event)) error {
 	for _, r := range c.GetRegistries() {
+		fmt.Println("####:r.AppendInstanceHandler(f):r:", r)
 		if err := r.AppendInstanceHandler(f); err != nil {
 			log.Infof("Fail to append instance handler to adapter %s", r.Name)
 			return err

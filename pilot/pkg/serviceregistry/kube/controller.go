@@ -603,8 +603,10 @@ func (c *Controller) getProxyServiceInstancesByPod(pod *v1.Pod, service *v1.Serv
 		out = append(out, c.getEndpoints(proxyIP, int32(portNum), svcPort, svc))
 
 	}
-	//getProxyServiceInstancesByPod:len(ServiceInstance):1,ServiceInstance:[0xc00082d580]
-	fmt.Printf("#####:getProxyServiceInstancesByPod:len(ServiceInstance):%v,ServiceInstance:%v", len(out), out)
+	if len(out) > 0 {
+		//getProxyServiceInstancesByPod:len(ServiceInstance):1,ServiceInstance:[0xc00082d580]
+		fmt.Printf("#####:getProxyServiceInstancesByPod:len(ServiceInstance):%v,ServiceInstance:%v", len(out), *out[0])
+	}
 	return out
 }
 
@@ -682,6 +684,7 @@ func (c *Controller) GetIstioServiceAccounts(hostname model.Hostname, ports []in
 
 // AppendServiceHandler implements a service catalog operation
 func (c *Controller) AppendServiceHandler(f func(*model.Service, model.Event)) error {
+	fmt.Println("####:kube.controller.AppendServiceHandler")
 	c.services.handler.Append(func(obj interface{}, event model.Event) error {
 		svc, ok := obj.(*v1.Service)
 		if !ok {
@@ -738,6 +741,7 @@ func (c *Controller) AppendServiceHandler(f func(*model.Service, model.Event)) e
 
 // AppendInstanceHandler implements a service catalog operation
 func (c *Controller) AppendInstanceHandler(f func(*model.ServiceInstance, model.Event)) error {
+	fmt.Println("####:kube.controller.AppendInstanceHandler")
 	if c.endpoints.handler == nil {
 		return nil
 	}
