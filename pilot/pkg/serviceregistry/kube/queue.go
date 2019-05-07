@@ -18,6 +18,7 @@ import (
 	"sync"
 	"time"
 
+	"fmt"
 	"istio.io/istio/pilot/pkg/model"
 	"istio.io/istio/pkg/log"
 )
@@ -91,6 +92,7 @@ func (q *queueImpl) Run(stop <-chan struct{}) {
 			return
 		}
 
+		fmt.Println("#####:q.queue len:", len(q.queue))
 		var item Task
 		item, q.queue = q.queue[0], q.queue[1:]
 		q.cond.L.Unlock()
@@ -112,6 +114,7 @@ type ChainHandler struct {
 
 // Apply is the handler function
 func (ch *ChainHandler) Apply(obj interface{}, event model.Event) error {
+	fmt.Println("#####:ch.funcs len:", len(ch.funcs))
 	for _, f := range ch.funcs {
 		if err := f(obj, event); err != nil {
 			return err
