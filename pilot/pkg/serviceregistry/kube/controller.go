@@ -722,6 +722,7 @@ func (c *Controller) AppendServiceHandler(f func(*model.Service, model.Event)) e
 		default:
 			c.Lock()
 			c.servicesMap[svcConv.Hostname] = svcConv
+			fmt.Println("#####:c.servicesMap len:",len(c.servicesMap))
 			if instances == nil {
 				delete(c.externalNameSvcInstanceMap, svcConv.Hostname)
 			} else {
