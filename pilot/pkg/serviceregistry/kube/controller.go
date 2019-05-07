@@ -189,11 +189,13 @@ func (c *Controller) createCacheHandler(informer cache.SharedIndexInformer, otyp
 			// TODO: filtering functions to skip over un-referenced resources (perf)
 			AddFunc: func(obj interface{}) {
 				k8sEvents.With(prometheus.Labels{"type": otype, "event": "add"}).Add(1)
+				fmt.Println("#####:AddFunc")
 				c.queue.Push(Task{handler: handler.Apply, obj: obj, event: model.EventAdd})
 			},
 			UpdateFunc: func(old, cur interface{}) {
 				if !reflect.DeepEqual(old, cur) {
 					k8sEvents.With(prometheus.Labels{"type": otype, "event": "update"}).Add(1)
+					fmt.Println("#####:UpdateFunc")
 					c.queue.Push(Task{handler: handler.Apply, obj: cur, event: model.EventUpdate})
 				} else {
 					k8sEvents.With(prometheus.Labels{"type": otype, "event": "updateSame"}).Add(1)
@@ -201,6 +203,7 @@ func (c *Controller) createCacheHandler(informer cache.SharedIndexInformer, otyp
 			},
 			DeleteFunc: func(obj interface{}) {
 				k8sEvents.With(prometheus.Labels{"type": otype, "event": "delete"}).Add(1)
+				fmt.Println("#####:DeleteFunc")
 				c.queue.Push(Task{handler: handler.Apply, obj: obj, event: model.EventDelete})
 			},
 		})
