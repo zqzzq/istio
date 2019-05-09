@@ -25,6 +25,7 @@ import (
 	"golang.org/x/time/rate"
 	"google.golang.org/grpc"
 
+	"fmt"
 	"istio.io/istio/pilot/pkg/model"
 	"istio.io/istio/pilot/pkg/networking/core"
 	"istio.io/istio/pilot/pkg/serviceregistry/kube"
@@ -392,6 +393,7 @@ func (s *DiscoveryServer) handleUpdates(stopCh <-chan struct{}) {
 	for {
 		select {
 		case r := <-s.updateChannel:
+			fmt.Println("#####:r := <-s.updateChannel")
 			lastConfigUpdateTime = time.Now()
 			if debouncedEvents == 0 {
 				timeChan = time.After(DebounceAfter)
@@ -405,6 +407,7 @@ func (s *DiscoveryServer) handleUpdates(stopCh <-chan struct{}) {
 			}
 
 		case now := <-timeChan:
+			fmt.Println("#####:now := <-timeChan")
 			timeChan = nil
 
 			eventDelay := now.Sub(startDebounce)

@@ -189,13 +189,13 @@ func (c *Controller) createCacheHandler(informer cache.SharedIndexInformer, otyp
 			// TODO: filtering functions to skip over un-referenced resources (perf)
 			AddFunc: func(obj interface{}) {
 				k8sEvents.With(prometheus.Labels{"type": otype, "event": "add"}).Add(1)
-				fmt.Println("#####:AddFunc")
+				//fmt.Println("#####:AddFunc")
 				c.queue.Push(Task{handler: handler.Apply, obj: obj, event: model.EventAdd})
 			},
 			UpdateFunc: func(old, cur interface{}) {
 				if !reflect.DeepEqual(old, cur) {
 					k8sEvents.With(prometheus.Labels{"type": otype, "event": "update"}).Add(1)
-					fmt.Println("#####:UpdateFunc")
+					//	fmt.Println("#####:UpdateFunc")
 					c.queue.Push(Task{handler: handler.Apply, obj: cur, event: model.EventUpdate})
 				} else {
 					k8sEvents.With(prometheus.Labels{"type": otype, "event": "updateSame"}).Add(1)
@@ -203,7 +203,7 @@ func (c *Controller) createCacheHandler(informer cache.SharedIndexInformer, otyp
 			},
 			DeleteFunc: func(obj interface{}) {
 				k8sEvents.With(prometheus.Labels{"type": otype, "event": "delete"}).Add(1)
-				fmt.Println("#####:DeleteFunc")
+				//	fmt.Println("#####:DeleteFunc")
 				c.queue.Push(Task{handler: handler.Apply, obj: obj, event: model.EventDelete})
 			},
 		})
@@ -725,7 +725,7 @@ func (c *Controller) AppendServiceHandler(f func(*model.Service, model.Event)) e
 		default:
 			c.Lock()
 			c.servicesMap[svcConv.Hostname] = svcConv
-			fmt.Println("#####:c.servicesMap len:", len(c.servicesMap))
+			//fmt.Println("#####:c.servicesMap len:", len(c.servicesMap))
 			if instances == nil {
 				delete(c.externalNameSvcInstanceMap, svcConv.Hostname)
 			} else {
@@ -815,7 +815,7 @@ func (c *Controller) updateEDS(ep *v1.Endpoints, event model.Event) {
 
 	//Handle EDS endpoint reviews in namespace test13 -> [{[{158.158.110.172  0xc426694ba0 &ObjectReference{Kind:Pod,Namespace:test13,Name:reviews-v1-549bd9ccf6-kjhv9,UID:bd0bba14-6562-11e9-93c0-6c92bf744022,APIVersion:,ResourceVersion:162504602,FieldPath:,}} {158.158.111.140  0xc426694bb0 &ObjectReference{Kind:Pod,Namespace:test13,Name:reviews-v2-56985f9db4-q8p7k,UID:149b0b64-6745-11e9-93c0-6c92bf744022,APIVersion:,ResourceVersion:167312361,FieldPath:,}} {158.158.68.151  0xc426694bd0 &ObjectReference{Kind:Pod,Namespace:test13,Name:reviews-v2-6fbd8b8bd-8ns64,UID:bd57174b-6562-11e9-93c0-6c92bf744022,APIVersion:,ResourceVersion:162505557,FieldPath:,}} {158.158.76.164  0xc426694be0 &ObjectReference{Kind:Pod,Namespace:test13,Name:reviews-v2-56985f9db4-blzrd,UID:e614a666-6745-11e9-93c0-6c92bf744022,APIVersion:,ResourceVersion:167313526,FieldPath:,}}] [] [{http 9080 TCP}]}] [0xc44042c090 0xc44042c120 0xc44042c1b0 0xc44042c240]
 	log.Infof("Handle EDS endpoint %s in namespace %s -> %v %v", ep.Name, ep.Namespace, ep.Subsets, endpoints)
-
+	fmt.Println("#####:c.ClusterID:",c.ClusterID)
 	_ = c.XDSUpdater.EDSUpdate(c.ClusterID, string(hostname), endpoints)
 }
 

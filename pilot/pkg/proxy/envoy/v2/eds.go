@@ -27,6 +27,7 @@ import (
 	"github.com/gogo/protobuf/types"
 	"github.com/prometheus/client_golang/prometheus"
 
+	"fmt"
 	"istio.io/istio/pilot/pkg/model"
 	"istio.io/istio/pilot/pkg/networking/core/v1alpha3/loadbalancer"
 	"istio.io/istio/pilot/pkg/networking/util"
@@ -502,6 +503,7 @@ func (s *DiscoveryServer) WorkloadUpdate(id string, labels map[string]string, _ 
 // on each step: instead the conversion happens once, when an endpoint is first discovered.
 func (s *DiscoveryServer) EDSUpdate(shard, serviceName string,
 	istioEndpoints []*model.IstioEndpoint) error {
+	fmt.Println("#####:shard:", shard)
 	s.edsUpdate(shard, serviceName, istioEndpoints, false)
 	return nil
 }
