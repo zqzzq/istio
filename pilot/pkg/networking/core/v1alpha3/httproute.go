@@ -160,7 +160,9 @@ func (configgen *ConfigGeneratorImpl) buildSidecarOutboundHTTPRouteConfig(env *m
 	// Get list of virtual services bound to the mesh gateway
 	virtualHostWrappers := istio_route.BuildSidecarVirtualHostsFromConfigAndRegistry(node, push, nameToServiceMap, proxyLabels, virtualServices, listenerPort)
 	vHostPortMap := make(map[int][]route.VirtualHost)
-
+	if len(virtualHostWrappers) > 0 {
+		fmt.Printf("#####:len(virtualHostWrappers):%v, virtualHostWrappers[0]:%v", len(virtualHostWrappers), virtualHostWrappers[0])
+	}
 	for _, virtualHostWrapper := range virtualHostWrappers {
 		// If none of the routes matched by source, skip this virtual host
 		if len(virtualHostWrapper.Routes) == 0 {
@@ -251,7 +253,7 @@ func (configgen *ConfigGeneratorImpl) buildSidecarOutboundHTTPRouteConfig(env *m
 		}
 		p.OnOutboundRouteConfiguration(in, out)
 	}
-
+	fmt.Println("#####:xdsapi.RouteConfiguration:", out)
 	return out
 }
 
