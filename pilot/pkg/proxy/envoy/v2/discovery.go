@@ -372,6 +372,7 @@ func (s *DiscoveryServer) clearCache() {
 // It replaces the 'clear cache' from v1.
 func (s *DiscoveryServer) ConfigUpdate(full bool) {
 	s.updateChannel <- &updateReq{full: full}
+	fmt.Printf("#####:len(s.updateChannel):%v,cap(s.updateChannel):%v", len(s.updateChannel), cap(s.updateChannel))
 }
 
 // Debouncing and update request happens in a separate thread, it uses locks
@@ -393,7 +394,7 @@ func (s *DiscoveryServer) handleUpdates(stopCh <-chan struct{}) {
 	for {
 		select {
 		case r := <-s.updateChannel:
-			fmt.Println("#####:r := <-s.updateChannel")
+			fmt.Println("#####:r := <-s.updateChannel start")
 			lastConfigUpdateTime = time.Now()
 			if debouncedEvents == 0 {
 				timeChan = time.After(DebounceAfter)
@@ -405,9 +406,9 @@ func (s *DiscoveryServer) handleUpdates(stopCh <-chan struct{}) {
 			if r.full {
 				fullPush = true
 			}
-
+			fmt.Println("#####:r := <-s.updateChannel end")
 		case now := <-timeChan:
-			fmt.Println("#####:now := <-timeChan")
+			fmt.Println("#####:now := <-timeChan start")
 			timeChan = nil
 
 			eventDelay := now.Sub(startDebounce)
@@ -423,6 +424,8 @@ func (s *DiscoveryServer) handleUpdates(stopCh <-chan struct{}) {
 				fullPush = false
 				debouncedEvents = 0
 				continue
+			} else {
+				fmt.Println("#####:time too short haha")
 			}
 
 			timeChan = time.After(DebounceAfter - quietTime)

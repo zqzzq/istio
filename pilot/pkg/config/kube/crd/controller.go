@@ -175,6 +175,7 @@ func (c *controller) createInformer(
 }
 
 func (c *controller) RegisterEventHandler(typ string, f func(model.Config, model.Event)) {
+	fmt.Println("#####:crd controller:RegisterEventHandler typ:", typ)
 	schema, exists := c.ConfigDescriptor().GetByType(typ)
 	if !exists {
 		return

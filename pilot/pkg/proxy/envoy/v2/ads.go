@@ -34,6 +34,7 @@ import (
 	"google.golang.org/grpc/peer"
 	"google.golang.org/grpc/status"
 
+	"fmt"
 	"istio.io/istio/pilot/pkg/model"
 	"istio.io/istio/pilot/pkg/networking/util"
 	istiolog "istio.io/istio/pkg/log"
@@ -891,6 +892,7 @@ func (s *DiscoveryServer) startPush(version string, push *model.PushContext, ful
 			}:
 				client.LastPush = time.Now()
 				client.LastPushFailure = timeZero
+				fmt.Println("#####:client.pushChannel <- &XdsEvent")
 			case <-client.stream.Context().Done(): // grpc stream was closed
 				adsLog.Infof("Client closed connection %v", client.ConID)
 			case <-time.After(PushTimeout):

@@ -710,8 +710,8 @@ func (c *Controller) AppendServiceHandler(f func(*model.Service, model.Event)) e
 		portsByNum := map[uint32]string{}
 
 		for _, port := range svc.Spec.Ports {
-			ports[port.Name] = uint32(port.Port)
-			portsByNum[uint32(port.Port)] = port.Name
+			ports[port.Name] = uint32(port.Port)      // "http-aa" -> 9080
+			portsByNum[uint32(port.Port)] = port.Name // 9080 -> "http-aa"
 		}
 
 		svcConv := convertService(*svc, c.domainSuffix)

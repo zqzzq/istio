@@ -300,6 +300,7 @@ func (s *DiscoveryServer) updateServiceShards(push *model.PushContext) error {
 	svc2account := map[string]map[string]bool{}
 
 	for _, registry := range registries {
+		fmt.Println("#####:updateServiceShards:registry.ClusterID:", registry.ClusterID)
 		// Each registry acts as a shard - we don't want to combine them because some
 		// may individually update their endpoints incrementally
 		for _, svc := range push.Services(nil) {
@@ -413,6 +414,7 @@ func (s *DiscoveryServer) updateCluster(push *model.PushContext, clusterName str
 // SvcUpdate is a callback from service discovery when service info changes.
 func (s *DiscoveryServer) SvcUpdate(cluster, hostname string, ports map[string]uint32, rports map[uint32]string) {
 	pc := s.globalPushContext()
+	fmt.Println("#####:SvcUpdate:cluster == ?", cluster)
 	if cluster == "" {
 		pl := model.PortList{}
 		for k, v := range ports {
