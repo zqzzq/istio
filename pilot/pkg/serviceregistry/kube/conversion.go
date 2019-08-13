@@ -25,6 +25,7 @@ import (
 	"istio.io/istio/pilot/pkg/model"
 	"istio.io/istio/pkg/spiffe"
 
+	"istio.io/istio/pkg/log"
 	v1 "k8s.io/api/core/v1"
 	meta_v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/intstr"
@@ -90,7 +91,12 @@ func convertService(svc v1.Service, domainSuffix string) *model.Service {
 
 	ports := make([]*model.Port, 0, len(svc.Spec.Ports))
 	for _, port := range svc.Spec.Ports {
-		ports = append(ports, convertPort(port))
+		mPort := convertPort(port)
+		if mPort.Protocol == model.ProtocolTCP && resolution == model.Passthrough {
+			log.Warnf("#####The TCP port %d in service %s must have an IP address", mPort.Port, svc.Name)
+			continue
+		}
+		ports = append(ports, mPort)
 	}
 
 	var exportTo map[model.Visibility]bool
