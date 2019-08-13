@@ -93,7 +93,7 @@ func convertService(svc v1.Service, domainSuffix string) *model.Service {
 	for _, port := range svc.Spec.Ports {
 		mPort := convertPort(port)
 		if mPort.Protocol == model.ProtocolTCP && resolution == model.Passthrough {
-			log.Warnf("#####The TCP port %d in service %s must have an IP address", mPort.Port, svc.Name)
+			log.Warnf("Couldn't find an IP address for TCP port %d of service %s in namespace %s", mPort.Port, svc.Name, svc.Namespace)
 			continue
 		}
 		ports = append(ports, mPort)

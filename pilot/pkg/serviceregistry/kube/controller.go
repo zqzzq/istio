@@ -706,7 +706,6 @@ func (c *Controller) AppendServiceHandler(f func(*model.Service, model.Event)) e
 		}
 
 		svcConv := convertService(*svc, c.domainSuffix)
-		fmt.Println("#####len(svcConv.Ports):", len(svcConv.Ports))
 		if len(svcConv.Ports) == 0 {
 			return nil
 		}
