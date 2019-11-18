@@ -1,6 +1,6 @@
 module istio.io/istio
 
-go 1.12
+go 1.13
 
 replace github.com/golang/glog => github.com/istio/glog v0.0.0-20190424172949-d7cfb6fa2ccd
 
@@ -17,6 +17,7 @@ require (
 	contrib.go.opencensus.io/exporter/zipkin v0.1.1
 	fortio.org/fortio v1.3.1
 	github.com/DataDog/datadog-go v2.2.0+incompatible
+	github.com/Masterminds/semver v1.4.2
 	github.com/Microsoft/go-winio v0.4.12 // indirect
 	github.com/Nvveen/Gotty v0.0.0-20120604004816-cd527374f1e5 // indirect
 	github.com/SAP/go-hdb v0.14.1 // indirect
@@ -44,7 +45,6 @@ require (
 	github.com/docker/go-connections v0.4.0
 	github.com/docker/go-units v0.4.0 // indirect
 	github.com/docker/spdystream v0.0.0-20181023171402-6480d4af844c // indirect
-	github.com/dropbox/godropbox v0.0.0-20190501155911-5749d3b71cbe // indirect
 	github.com/duosecurity/duo_api_golang v0.0.0-20190308151101-6c680f768e74 // indirect
 	github.com/elazarl/go-bindata-assetfs v1.0.0 // indirect
 	github.com/elazarl/goproxy v0.0.0-20190630181448-f1e96bc0f4c5 // indirect
@@ -52,8 +52,6 @@ require (
 	github.com/emicklei/go-restful v2.9.6+incompatible // indirect
 	github.com/envoyproxy/go-control-plane v0.9.1-0.20191101223502-bd9a500519ef
 	github.com/evanphx/json-patch v4.5.0+incompatible
-	github.com/facebookgo/stack v0.0.0-20160209184415-751773369052 // indirect
-	github.com/facebookgo/stackerr v0.0.0-20150612192056-c2fcf88613f4 // indirect
 	github.com/fatih/structs v1.1.0 // indirect
 	github.com/fluent/fluent-logger-golang v1.3.0
 	github.com/fsnotify/fsnotify v1.4.7
@@ -95,9 +93,6 @@ require (
 	github.com/hashicorp/vault v0.10.0
 	github.com/howeyc/fsnotify v0.9.0
 	github.com/jefferai/jsonx v1.0.0 // indirect
-	github.com/juju/errors v0.0.0-20190207033735-e65537c515d7 // indirect
-	github.com/juju/loggo v0.0.0-20190212223446-d976af380377 // indirect
-	github.com/juju/testing v0.0.0-20190429233213-dfc56b8c09fc // indirect
 	github.com/keybase/go-crypto v0.0.0-20190416182011-b785b22cc757 // indirect
 	github.com/lestrrat-go/jwx v0.9.0
 	github.com/lib/pq v1.2.0 // indirect
@@ -130,10 +125,6 @@ require (
 	github.com/ryanuber/go-glob v0.0.0-20160226084822-572520ed46db // indirect
 	github.com/satori/go.uuid v1.2.0
 	github.com/sethgrid/pester v0.0.0-20180227223404-ed9870dad317 // indirect
-	github.com/signalfx/com_signalfx_metrics_protobuf v0.0.0-20170330202426-93e507b42f43
-	github.com/signalfx/gohistogram v0.0.0-20160107210732-1ccfd2ff5083 // indirect
-	github.com/signalfx/golib v1.1.7
-	github.com/smartystreets/goconvey v0.0.0-20190330032615-68dc04aab96a // indirect
 	github.com/spf13/cobra v0.0.5
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
 	github.com/spf13/pflag v1.0.5
@@ -157,16 +148,14 @@ require (
 	google.golang.org/genproto v0.0.0-20191009194640-548a555dbc03
 	google.golang.org/grpc v1.24.0
 	gopkg.in/d4l3k/messagediff.v1 v1.2.1
-	gopkg.in/logfmt.v0 v0.3.0 // indirect
 	gopkg.in/mgo.v2 v2.0.0-20180705113604-9856a29383ce // indirect
 	gopkg.in/ory-am/dockertest.v3 v3.3.4 // indirect
 	gopkg.in/square/go-jose.v2 v2.3.1
-	gopkg.in/stack.v1 v1.7.0 // indirect
 	gopkg.in/yaml.v2 v2.2.4
-	istio.io/api v0.0.0-20191106220915-75ed25ab6842
-	istio.io/gogo-genproto v0.0.0-20190930162913-45029607206a
-	istio.io/operator v0.0.0-20191030215937-82ada6c8f22f
-	istio.io/pkg v0.0.0-20191029184635-5c2f5ef63692
+	istio.io/api v0.0.0-20191115171246-7a8183d7e4bf
+	istio.io/gogo-genproto v0.0.0-20191024203824-d079cc8b1d55
+	istio.io/operator v0.0.0-20191116191844-787ab3bb075b
+	istio.io/pkg v0.0.0-20191113122952-4f521de9c8ca
 	k8s.io/api v0.0.0
 	k8s.io/apiextensions-apiserver v0.0.0
 	k8s.io/apimachinery v0.0.0
